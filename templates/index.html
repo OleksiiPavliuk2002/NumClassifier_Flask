@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <title>MNIST Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <header class="header">
+        <div>
+          <h1>MNIST Classifier</h1>
+          <p class="lead">Завантажте зображення цифри 28×28, щоб модель класифікувала його й записала результат у базу.</p>
+        </div>
+      </header>
+      <div class="card">
+        <p>Оберіть PNG-зображення 28x28 з локального диска для класифікації.</p>
+        <form method="post" enctype="multipart/form-data" class="form-row">
+          <label for="image_file">Виберіть PNG-файл</label>
+          <input type="file" id="image_file" name="image_file" accept="image/png" required>
+          <button type="submit">Класифікувати</button>
+        </form>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="flash">
+        {% for category, message in messages %}
+          <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+
+      {% if result %}
+      <div class="card result">
+        <h2>Результат</h2>
+        <p><strong>Шлях:</strong> {{ result.image_path }}</p>
+        <p><strong>Передбачена мітка:</strong> {{ result.predicted_label }}</p>
+        <p><strong>Істинна мітка:</strong> {{ result.true_label if result.true_label is not none else 'Невідомо' }}</p>
+        <p>Запис додано до бази даних.</p>
+      </div>
+      {% endif %}
+      <footer>
+        <p>MNIST Classifier — простий веб-додаток для тестування PNG-зображень цифр.</p>
+      </footer>
+    </div>
+</html>
